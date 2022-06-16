@@ -54,6 +54,7 @@ router.get("/", async (req, res) => {
         genres: v.genres.map((g) => {
           return g.name;
         }),
+        rating: v.rating,
         userMade: true,
       };
     });
@@ -73,18 +74,18 @@ router.get("/", async (req, res) => {
         genres: v.genres.map((g) => {
           return g.name;
         }),
+        rating: v.rating,
       };
     });
 
     const videogames = [...videoGamesFromDb, ...videoGamesFromApi];
 
-    //Si no tengo juegos mando un error, de lo contrario mando el json
+    //Si no tengo juegos mando un arr vacio, de lo contrario mando el json
     videogames.length === 0
-      ? res.send({ Error: "No existe ningun juego con ese nombre." })
+      ? res.send([])
       : res.send(videogames);
   } catch (e) {
     //si pasa algo, lo mando como error.
-    console.log(e);
     res.send({ Error: e });
   }
 });
@@ -127,9 +128,10 @@ router.post("/", async (req, res) => {
     });
 
     //Envio respuesta de que cree el juego x con el id n.
-    res.send(
-      `Videojuego ${videogame.dataValues.name} creado con el id ${videogame.dataValues.id}.`
-    );
+    res.send({
+      success: `Videojuego ${videogame.dataValues.name} creado con el id "u${videogame.dataValues.id}".`, 
+      id: videogame.dataValues.id
+    });
   } catch (e) {
     //si pasa algo inesperado, lo atrapo.
     res.send({ Error: e });

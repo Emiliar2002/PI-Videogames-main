@@ -1,0 +1,41 @@
+@font-face {
+    font-family: gow;
+    src: url(./GODOFWAR.TTF);
+}
+
+.portada{
+    width: 100%;
+}
+
+.enter{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    text-decoration: none;
+    font-family: gow;
+    background-color: black;
+    padding: 20px;
+    border-radius: 25px;
+    transition: 0.6s;
+}
+
+.enter:hover{
+    color: #FBB741;
+}
+
+.enter:visited:hover{
+    color: #FBB741;
+}
+
+.enter:visited{
+    color: white;
+    text-decoration: none;
+}
+
+.container {
+    position: relative;
+    text-align: center;
+    color: white;
+  }

@@ -73,7 +73,7 @@ router.get("/:id", async (req, res) => {
         id: requestData.id,
         name: requestData.name,
         description: requestData.description,
-        releaseDate: requestData.release_date,
+        releaseDate: requestData.released,
         rating: requestData.rating,
         image: requestData.background_image,
         genres: requestData.genres.map((g) => {
