@@ -48,20 +48,20 @@ Genre.belongsToMany(Videogame, {through: 'VideogameGenres'})
 Videogame.belongsToMany(Platform, {through: 'VideogamePlatforms'})
 Platform.belongsToMany(Videogame, {through: 'VideogamePlatforms'})
 
-async function addGenres(){
-const genreRequest = await axios.get(`https://api.rawg.io/api/genres?key=${API_KEY}`)
-const genres = genreRequest.data.results
+// async function addGenres(){
+// const genreRequest = await axios.get(`https://api.rawg.io/api/genres?key=${API_KEY}`)
+// const genres = genreRequest.data.results
 
 
-//Traigo los géneros de la api y aviso.
-genres.forEach(async (g) => {
-  await Genre.create({name: g.name})
-})
+// //Traigo los géneros de la api y aviso.
+// genres.forEach(async (g) => {
+//   await Genre.create({name: g.name})
+// })
 
 
-console.log('Generos creados.')
+// console.log('Generos creados.')
 
-}
+// }
 
 
 module.exports = {
@@ -69,4 +69,4 @@ module.exports = {
   conn: sequelize,     // para importart la conexión { conn } = require('./db.js');
 };
 
-addGenres()
+// addGenres()
