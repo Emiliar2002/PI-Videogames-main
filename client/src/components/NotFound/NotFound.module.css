@@ -1,0 +1,13 @@
+.container{
+    background-color: black;
+    color: whitesmoke;
+    text-align: center;
+}
+
+.container > h1{
+    font-size: 92px;
+}
+
+.container > img{
+    border-radius: 5px;
+}

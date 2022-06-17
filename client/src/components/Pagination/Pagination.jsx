@@ -1,4 +1,5 @@
 import React from "react";
+import css from './Pagination.module.css'
 
 
 const Pagination = ({gamesPerPage, totalGames, paginate}) => {
@@ -14,7 +15,7 @@ const Pagination = ({gamesPerPage, totalGames, paginate}) => {
             {pageNumbers.map(n => {
                 return(
                 <span key={n}>
-                    <a onClick={() => paginate(n)} href="#">{n}</a>
+                    <a className={css.number} onClick={() => paginate(n)} href="#">{n}</a>
                 </span>
                 )
             })}

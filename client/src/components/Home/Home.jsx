@@ -9,7 +9,6 @@ import Pagination from "../Pagination/Pagination";
 const Home = () => {
 
 
-
     let dispatch = useDispatch()
     let games = useSelector((state) => state.games)
     let genres = useSelector((state) => state.genres)
@@ -23,6 +22,7 @@ const Home = () => {
 
       function search(){
         dispatch(getAllGames(input.value))
+        showAll()
       }
 
 
@@ -62,6 +62,7 @@ const Home = () => {
             }))
         }else{
             setFilter((filter) => ({
+                ...filter,
                 filtered: filter.ascendente ? 
                 [...games].sort((a, b) => {
                     if(a.name.toLowerCase() < b.name.toLowerCase()) return -1
@@ -91,14 +92,14 @@ const Home = () => {
                 ...filter,
                 filtered: filter.ascendente ? 
                 [...filter.filtered].sort((a, b) => {
-                    if(a.rating < b.rating) return -1
-                    if(a.rating > b.rating) return 1
+                    if(a.rating > b.rating) return -1
+                    if(a.rating < b.rating) return 1
                     return 0
                 })
                 :
                 [...filter.filtered].sort((a, b) => {
-                    if(a.rating > b.rating) return -1
-                    if(a.rating < b.rating) return 1
+                    if(a.rating < b.rating) return -1
+                    if(a.rating > b.rating) return 1
                     return 0
                 })
             }))
@@ -138,6 +139,7 @@ const Home = () => {
             rating: false,
             userMade: filter.userMade ? false : true,
         })
+        if(filter.userMade) return showAll()
     }
     else if(e.target.name === 'abc'){
         return setFilter((filter) => ({
@@ -168,7 +170,7 @@ const Home = () => {
         })
         else{
             setFilter({
-                ascendente: false,
+                ascendente: filter.ascendente,
                 userMade: false,
                 abc: false,
                 rating: false,
@@ -207,7 +209,7 @@ const Home = () => {
 
       function showAll(){
         setFilter({
-            ascendente: false,
+            ascendente: filter.ascendente,
             userMade: false,
             abc: false,
             rating: false,
@@ -215,12 +217,25 @@ const Home = () => {
             genreFiltered: '',
         })
       }
+
+      let filteredNoResults = filter.filtered.length === 0 && (filter.userMade || filter.genreFiltered !== '')
+      let filtered = filter.filtered.length !== 0
+      let loading = games.length === 0
+
       const [currentPage, setCurrentPage] = useState(1)
       let gamesPerPage = 15
       let indexOfLastGame = currentPage * gamesPerPage;
       let indexOfFirstGame = indexOfLastGame - gamesPerPage;
-      let currentGames = games.slice(indexOfFirstGame, indexOfLastGame)
+      let currentGames = !filtered ? games.slice(indexOfFirstGame, indexOfLastGame) : filter.filtered.slice(indexOfFirstGame, indexOfLastGame)
       let paginate = (pageNumber) => setCurrentPage(pageNumber)
+
+
+      let found = !filteredNoResults && currentGames.length > 0
+
+
+
+
+
 
 
       
@@ -229,24 +244,31 @@ const Home = () => {
     return(
         <main className={css.main}>
             <Navbar/>
-            <h1>Jueguitos</h1>
+            <h1>JueguitosDB</h1>
             <input type='text' onChange={(e) => (setInput({value: e.target.value}))}/>
             <button onClick={() => search()} className={css.button}>Buscar</button>
-            <div className={css.filtros}>
-            <button className={css.button} name='mostrarTodo' onClick={() => {showAll()}}>Mostrar todos</button>
-            <button className={css.button} name='order' onClick={(e) => {order(e)}}>{filter.ascendente ? "Ascendente" : "Descendente"}</button>
-            <button className={filter.abc ? css.selected : css.button} name='abc' onClick={(e) => {abcHandler(e)}}>Orden alfabetico</button>
-            <button className={filter.rating ? css.selected : css.button} name='rating' onClick={(e) => {ratingHandler(e)}}>Rating</button>
-            <button className={filter.userMade ? css.selected : css.button} name='userMade' onClick={(e) => {filterHandler(e)}}>Agregados por usuarios</button>
-            {genres.map((g) => {
-                return(
-                    <button className={filter[g.name] ? css.selected : css.button} onClick={(e) => {filterHandler(e)}} name={g.name} key={g.id}>{g.name}</button>
-                )
-            })}
+
+            {found && <div className={css.filtros}>
+                <button className={css.button} name='order' onClick={(e) => {order(e)}}>{filter.ascendente ? "Ascendente" : "Descendente"}</button>
+                <button className={filter.abc ? css.selected : css.button} name='abc' onClick={(e) => {abcHandler(e)}}>Orden alfabetico</button>
+                <button className={filter.rating ? css.selected : css.button} name='rating' onClick={(e) => {ratingHandler(e)}}>Rating</button>
             </div>
+            }
+            { games.length > 0 &&
+            <div className={css.filtros}>
+                <button className={css.button} name='mostrarTodo' onClick={() => {showAll()}}>Mostrar todos</button>
+                <button className={filter.userMade ? css.selected : css.button} name='userMade' onClick={(e) => {filterHandler(e)}}>Agregados por usuarios</button>
+                {genres.map((g) => {
+                    return(
+                        <button className={filter[g.name] ? css.selected : css.button} onClick={(e) => {filterHandler(e)}} name={g.name} key={g.id}>{g.name}</button>
+                    )
+                })}
+            </div>
+            }
             <div className="juegos">
-                {
-                    filter.filtered.length === 0 ? currentGames.map((g) => {
+                {filteredNoResults && <h2>No se encontraron juegos con ese criterio.</h2>}
+                  {
+                  found && currentGames.map((g) => {
                         return(
                             <GameCard key={g.id}
                             id={g.id}
@@ -258,22 +280,17 @@ const Home = () => {
                             />
                         )
                     })
-                    :
-                    filter.filtered.map((g) => {
-                        return(
-                            <GameCard key={g.id}
-                            id={g.id}
-                            name={g.name}
-                            genres={g.genres}
-                            image={g.image}
-                            userMade={g.userMade}
-                            />
-                        )
-                    })
+                }
+
+                {
+                    loading && <h2>Cargando...</h2>
                 }
             </div>
-                {filter.filtered.length === 0 && <Pagination gamesPerPage={gamesPerPage} totalGames={games.length} paginate={paginate}/>}
+                {found && <Pagination gamesPerPage={gamesPerPage} totalGames={filtered ? filter.filtered.length : games.length} paginate={paginate}/>}
+
+                {console.log(currentGames)}
         </main>
+    
     )
 }
 

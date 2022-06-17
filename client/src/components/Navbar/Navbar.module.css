@@ -1,0 +1,37 @@
+.div{
+    background-color: black;
+    width: 100%;
+}
+
+.div > ul{
+    display: flex;
+    flex-direction: row;
+}
+
+.div > ul > li{
+    list-style-type: none;
+    color: white;
+    margin: auto;
+}
+
+ul > h1{
+    padding: 20px;
+}
+
+.headerTitle{
+    padding: 20px;
+    color: white;
+    text-decoration: none;
+
+}
+
+.link{
+    color: white;
+    text-decoration: none;
+    font-size: 30px;
+    padding: 20px;
+}
+
+.link:hover{
+    color: darkred;
+}

@@ -54,7 +54,7 @@ router.get("/", async (req, res) => {
         genres: v.genres.map((g) => {
           return g.name;
         }),
-        rating: v.rating,
+        rating: v.rating ? v.rating : 0,
         userMade: true,
       };
     });
@@ -74,7 +74,7 @@ router.get("/", async (req, res) => {
         genres: v.genres.map((g) => {
           return g.name;
         }),
-        rating: v.rating,
+        rating: v.rating ? v.rating : 0,
       };
     });
 

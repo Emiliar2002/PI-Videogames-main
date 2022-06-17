@@ -1,0 +1,11 @@
+.number{
+    color: white;
+    text-decoration: none;
+    margin-left: 16px;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.number:hover{
+    color: darkred;
+}
