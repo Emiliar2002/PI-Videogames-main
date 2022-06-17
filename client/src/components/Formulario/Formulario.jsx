@@ -138,7 +138,7 @@ const Formulario = () => {
             platforms: platforms
         }
         try{
-        let res = await axios.post('http://localhost:3001/videogames', payload)
+        let res = await axios.post(process.env.REACT_APP_API_URL + '/videogames', payload)
 
         return setInput({...input, error: false, success: res.data})
     }catch(e){
