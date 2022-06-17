@@ -4,13 +4,13 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios')
 const {
-  DB_USER, DB_PASSWORD, DB_HOST, API_KEY, DB_NAME
+  DB_USER, DB_PASSWORD, DB_HOST, API_KEY, DB_NAME, SSL
 } = process.env;
 
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`, {
   logging: false, // set to console.log to see the raw SQL queries
   native: false, // lets Sequelize know we can use pg-native for ~30% more speed
-  dialectOptions: {
+  dialectOptions: SSL === 'true' && {
     ssl: {
       require: true,
       rejectUnauthorized: false
@@ -48,20 +48,20 @@ Genre.belongsToMany(Videogame, {through: 'VideogameGenres'})
 Videogame.belongsToMany(Platform, {through: 'VideogamePlatforms'})
 Platform.belongsToMany(Videogame, {through: 'VideogamePlatforms'})
 
-// async function addGenres(){
-// const genreRequest = await axios.get(`https://api.rawg.io/api/genres?key=${API_KEY}`)
-// const genres = genreRequest.data.results
+async function addGenres(){
+const genreRequest = await axios.get(`https://api.rawg.io/api/genres?key=${API_KEY}`)
+const genres = genreRequest.data.results
 
 
-// //Traigo los géneros de la api y aviso.
-// genres.forEach(async (g) => {
-//   await Genre.create({name: g.name})
-// })
+//Traigo los géneros de la api y aviso.
+genres.forEach(async (g) => {
+  await Genre.create({name: g.name})
+})
 
 
-// console.log('Generos creados.')
+console.log('Generos creados.')
 
-// }
+}
 
 
 module.exports = {
@@ -69,4 +69,4 @@ module.exports = {
   conn: sequelize,     // para importart la conexión { conn } = require('./db.js');
 };
 
-// addGenres()
+addGenres()
