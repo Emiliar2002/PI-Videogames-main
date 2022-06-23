@@ -10,6 +10,7 @@ const Navbar = () => {
                 <Link className={css.headerTitle} to={'/home'}><h1>Jueguitos DB</h1></Link>
                 <li><Link className={css.link} to={'/home'}>Home</Link></li>
                 <li><Link className={css.link} to={'/crear'}>Crear videojuego</Link></li>
+                <li><Link className={css.link} to={'/editar'}>Editar videojuego</Link></li>
             </ul>
         </div>
     )

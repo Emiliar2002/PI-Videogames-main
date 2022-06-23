@@ -80,9 +80,8 @@ router.get("/", async (req, res) => {
 
     const videogames = [...videoGamesFromDb, ...videoGamesFromApi];
 
-    //Si no tengo juegos mando un arr vacio, de lo contrario mando el json
     videogames.length === 0
-      ? res.send([])
+      ? res.send({Error: 'No se encontraron juegos con ese nombre'})
       : res.send(videogames);
   } catch (e) {
     //si pasa algo, lo mando como error.

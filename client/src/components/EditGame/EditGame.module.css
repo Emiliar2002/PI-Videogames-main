@@ -1,0 +1,76 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main{
+    color: white;
+    background-color: black;
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    overflow-wrap: break-word;
+    margin-top: 20px;
+}
+
+.gameData{
+    flex-direction: column;
+    margin-left: 100px;
+    width: 400px;
+}
+
+.form > *{
+    display: block;
+}
+
+.form > label{
+    font-size: 20px;
+    color: white;
+}
+
+.form > input{
+    border-radius: 5px;
+    padding: 5px;
+}
+
+
+
+.form > button{
+    margin-top: 20px;
+    border-radius: 5px;
+    background-color: white;
+    font-size: 20px;
+    padding: 5px;
+}
+
+.genres{
+    width: 220px;
+}
+
+.platforms{
+    width: 220px;
+}
+
+.platforms > button{
+    background-color: rgb(71, 6, 6);
+    color: whitesmoke;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.genres > button{
+    padding: 5px;
+    color: whitesmoke;
+    background-color: rgb(28, 18, 90);
+    border-radius: 10px;
+}
+
+.platforms > button:hover{
+    border: 1px solid white;
+}
+
+.genres > button:hover{
+    border: 1px solid white;
+}

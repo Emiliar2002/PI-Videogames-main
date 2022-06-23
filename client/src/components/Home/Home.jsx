@@ -139,7 +139,6 @@ const Home = () => {
             rating: false,
             userMade: filter.userMade ? false : true,
         })
-        if(filter.userMade) return showAll()
     }
     else if(e.target.name === 'abc'){
         return setFilter((filter) => ({
@@ -191,6 +190,9 @@ const Home = () => {
                 }
             })
         }))
+
+        setCurrentPage(1)
+
       }
 
       function order(e){
@@ -220,13 +222,20 @@ const Home = () => {
 
       let filteredNoResults = filter.filtered.length === 0 && (filter.userMade || filter.genreFiltered !== '')
       let filtered = filter.filtered.length !== 0
-      let loading = games.length === 0
+      let loading = games.length === 0 && Array.isArray(games)
 
       const [currentPage, setCurrentPage] = useState(1)
       let gamesPerPage = 15
       let indexOfLastGame = currentPage * gamesPerPage;
       let indexOfFirstGame = indexOfLastGame - gamesPerPage;
-      let currentGames = !filtered ? games.slice(indexOfFirstGame, indexOfLastGame) : filter.filtered.slice(indexOfFirstGame, indexOfLastGame)
+      let getCurrentGames = () => {
+        if(Array.isArray(games)){
+        if(!filtered) return games.slice(indexOfFirstGame, indexOfLastGame)
+        else return filter.filtered.slice(indexOfFirstGame, indexOfLastGame)
+        }
+        else return []
+      }
+      let currentGames = getCurrentGames()
       let paginate = (pageNumber) => setCurrentPage(pageNumber)
 
 
@@ -282,9 +291,9 @@ const Home = () => {
                     })
                 }
 
-                {
-                    loading && <h2>Cargando...</h2>
-                }
+                
+                    {loading && <h2>Cargando...</h2>}
+                    {!Array.isArray(games) && <h2>Error: No existe ningun juego con ese nombre.</h2>}
             </div>
                 {found && <Pagination gamesPerPage={gamesPerPage} totalGames={filtered ? filter.filtered.length : games.length} paginate={paginate}/>}
 

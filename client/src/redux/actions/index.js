@@ -14,7 +14,10 @@ export const getAllGames = (game) => dispatch => {
     else{
         return fetch(process.env.REACT_APP_API_URL + '/videogames?name=' + game)
         .then(response => response.json())
-        .then(json => dispatch({type:GET_ALL_GAMES, payload: json}))
+        .then((json) =>{ 
+            console.log(json)
+            dispatch({type:GET_ALL_GAMES, payload: json})
+        })
     }
 }
 

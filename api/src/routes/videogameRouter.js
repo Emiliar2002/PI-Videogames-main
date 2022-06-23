@@ -92,4 +92,75 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.delete('/:id',  async (req, res) => {
+
+  //agarro el id de los parametros
+  let { id } = req.params;
+
+  if(id[0] !== 'u') return res.send({Error: 'No se puede borrar ese juego.'})
+
+  let parsedId = parseInt(id.slice(1));
+
+
+  const destroyed = await Videogame.destroy({where: {id: parsedId}})
+
+  let response = destroyed ? `Videojuego con el id ${id} eliminado.` : `El juego ${id} no existe o no se puede eliminar.`
+
+  res.send(response)
+
+});
+
+router.put('/:id', async (req, res) => {
+  //agarro el id de los parametros
+  let {id} = req.params
+  let { name, description, releaseDate, rating, platforms, genres } = req.body;
+
+  let parsedId = parseInt(id.slice(1));
+
+  console.log(releaseDate)
+
+  try{
+  const edited = await Videogame.findByPk(parsedId)
+
+  console.log(edited)
+
+  await edited.update({
+    name: name ? name : edited.dataValues.name,
+    description: description ? description : edited.dataValues.description,
+    release_date: releaseDate ? releaseDate : edited.dataValues.release_date,
+    rating: rating ? rating : edited.dataValues.rating
+  })
+
+    platforms && platforms.forEach(async (p) => {
+      let platform = await Platform.findOrCreate({
+        where: { name: p },
+        defaults: { name: p },
+      });
+
+      await edited.addPlatforms(platform[0].dataValues.id);
+    });
+
+    genres && genres.forEach(async (g) => {
+      let genre = await Genre.findOrCreate({
+        where: { name: g },
+        defaults: { name: g },
+      });
+
+      await edited.addGenres(genre[0].dataValues.id);
+    });
+
+
+    console.log(edited)
+    res.send({
+      success: `Videojuego editado.`, 
+    });
+
+  }catch(e){
+    console.log(e)
+    res.send({ Error: e });
+  }
+
+
+})
+
 module.exports = router;
